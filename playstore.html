@@ -1,0 +1,47 @@
+<html> 
+<head> 
+<title>PlayStore Apps</title> 
+<meta name=viewport content="width=device-width"></head> 
+<SCRIPT>
+
+function PLCOnvert(a)
+{
+    var URL = document.all.A.value;
+    if(URL)
+    {
+       var id=URL.split('?id=')[1];
+       if(id)
+       {
+         var Cid = id.split('&')[0];
+         var Link="https://"+a+Cid;
+         window.open(Link,"_blank");
+        }   
+    }else{ alert("Is This a JOke????"); } 
+}
+
+</SCRIPT>
+<body>
+  <div align=left>
+  <TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=320>
+    <TR><td>
+      
+      <div align=left>PlayStore App URL</div>
+      <INPUT ID="A" TYPE="TEXT" NAME="A" style="width:300px;">
+      <BUTTON onclick="PLCOnvert('m.apkpure.com/')">To ApkPure</BUTTON>&nbsp;
+      <BUTTON onclick="PLCOnvert('apk.support/app/')">To ApkSupport</BUTTON>&nbsp;
+      <BUTTON onclick="PLCOnvert('apkgk.com/')">To apkgk</BUTTON>
+    </TD></TR>
+  </TABLE>
+</div>
+<br></br>
+<div>
+<A HREF="https://AM71113363.github.io"><IMG style="width:40px;height:40px;" src="https://AM71113363.github.io/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://github.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://github.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://twitter.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://twitter.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://account.xbox.com/en-us/profile?gamertag=AM71113363"><IMG style="width:40px;height:40px;" src="https://xbox.com/favicon.ico"></IMG></A>
+</div>
+</html> 
+ 

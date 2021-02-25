@@ -1,0 +1,77 @@
+<html> 
+<head> 
+<title>HASH & MAGNET to .torrent</title> 
+<meta name=viewport content="width=device-width"></head> 
+<SCRIPT>
+
+function GetTorrent()
+{
+    var Hash = document.all.torrentHash.value; 
+    var Name = document.all.torrentName.value; 
+    var temp;
+    if(Hash)
+    {
+        var p = Hash.split('magnet:?xt=urn:btih:')[1];
+        if(p)
+        {
+           var d = p.split('&dn')[0];
+           if(d)
+           {
+              Hash = d;
+              if(d.length != 40)
+              {
+                 document.all.torrentHash.value = "";
+                 alert("Damaged Magnet Link");
+                 return;
+              }
+           }
+           else
+           { 
+                 document.all.torrentHash.value = "";
+                 alert("Invalid Magnet Link");
+                 return;
+           }
+       } 
+       if(Hash.length != 40)
+       {
+          document.all.torrentHash.value = "";
+          alert("Invalid HASH");
+          return;
+       }
+       temp = "https://itorrents.org/torrent/" + Hash + ".torrent";
+
+       if(Name.length > 0)
+       {
+		   temp=temp+"?title="+Name;
+       
+       }
+       document.all.torrentHash.value = "";
+       window.open(temp,"_blank");     
+    } else{ alert("Is This a JOke????"); }
+}
+</SCRIPT>
+<body>
+  <div align=left>
+  <TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=320>
+    <TR><td>
+      
+      <div align=left>torrent HASH or magnet URL link</div>
+      <INPUT ID="torrentHash" TYPE="TEXT" NAME="torrentHash" style="width:300px;">
+      <div align=left>Torrent Name(for SPACE use "+")</div>
+      <INPUT ID="torrentName" TYPE="TEXT" value="My+Torrent" NAME="torrentName" style="width:200px;">
+      <BUTTON onclick="GetTorrent()">Download</BUTTON>
+    </TD></TR>
+  </TABLE>
+</div>
+<br></br>
+<div>
+<A HREF="https://AM71113363.github.io"><IMG style="width:40px;height:40px;" src="https://AM71113363.github.io/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://github.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://github.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://twitter.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://twitter.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://account.xbox.com/en-us/profile?gamertag=AM71113363"><IMG style="width:40px;height:40px;" src="https://xbox.com/favicon.ico"></IMG></A>
+</div>
+</html> 
+ 
