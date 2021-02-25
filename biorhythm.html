@@ -60,6 +60,18 @@ function BuildTables()
 
 	while( i < nElem)
 	{
+	    if((ThisYearC%4)==0)
+		{
+		     if((ThisDayC+i)>md[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
+		}
+		else
+		{
+		    if((ThisDayC+i)>mn[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
+		}
+	    
+	    if(ThisMonthC > 12){ ThisMonthC=1; ThisYearC = ThisYearC +1; }
+	    
+	
 	    Data=new Date(String(ThisMonthC)+"/"+String(ThisDayC+i)+"/"+String(ThisYearC));
 	    index=Data.getDate();
         if(i==4)
