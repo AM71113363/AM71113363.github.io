@@ -4,20 +4,9 @@
 <meta name=viewport content="width=device-width">
 </HEAD>
 <SCRIPT type="text/javascript">
-var bBody;
-var ThisDay;
-var ThisMonth;
-var ThisYear;
-var Bday;
-var Bmonth;
-var Byear;
-var Data;
-var cF;
-var cE;
-var cI;
-var index;
-var diff;
-var nElem;
+
+var bBody, ThisDay, ThisMonth, ThisYear, Bday, Bmonth, Byear;
+var Data, cF, cE, cI, index, diff, nElem;
 var mn=new Array(31,28,31,30,31,30,31,31,30,31,30,31);
 var md=new Array(31,29,31,30,31,30,31,31,30,31,30,31);
 
@@ -31,7 +20,6 @@ var apI=new Array(0,-18,-34,-48,-59,-69,-75,-79,-81,-80,-77,-72,-64,-53,-41,-26,
 var acI=new Array(0,16,17);
 var avI=new Array(0,8,15,17,18,19,20,21,23,22,20,18,17,15,13,10,3,2,5,9,9,9,9,8,7,6,8,8,9,9,9,9,5);
 
-
 function BuildTables()
 {
 	var i=0;
@@ -40,209 +28,158 @@ function BuildTables()
 	var ThisYearC;
 	ThisDayC=ThisDay-4;
 	ThisMonthC=ThisMonth;ThisYearC=ThisYear;
-	if (ThisDayC<1)
-	{
-		ThisMonthC=ThisMonth-1;
-		if (ThisMonthC<1)
-		{
-			ThisMonthC=ThisMonthC+12;
-			ThisYearC=ThisYear-1;
-		} 
-		if((ThisYearC%4)==0)
-		{
-		  ThisDayC=ThisDayC+md[ThisMonthC-1];
-		}
-		else
-		{
-		  ThisDayC=ThisDayC+mn[ThisMonthC-1];
-		}
-	}
-
-	while( i < nElem)
-	{
-	    if((ThisYearC%4)==0)
-		{
-		     if((ThisDayC+i)>md[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
-		}
-		else
-		{
-		    if((ThisDayC+i)>mn[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
-		}
-	    
-	    if(ThisMonthC > 12){ ThisMonthC=1; ThisYearC = ThisYearC +1; }
-	    
-	
-	    Data=new Date(String(ThisMonthC)+"/"+String(ThisDayC+i)+"/"+String(ThisYearC));
-	    index=Data.getDate();
-        if(i==4)
-	    {
-	         bBody="<img style=\"position: absolute; left: "+String(18*(i)+8)+"; top: 0\" src=\"images/d.gif\" width=\"18\" height=\"330\"></img>";
- 		}
-		else
-		{
-		     bBody="<img style=\"position: absolute; left: "+String(18*(i)+8)+"; top: 0\" src=\"images/b.gif\"  width=\"18\" height=\"330\"></img>";
-		}
-		if(index <10){ index = "0"+index; }		    
-		bBody+="<div style=\"position: absolute; left: "+String(18*(i)+10)+"; top: 274\"><H5><b>"+index+"</b></H5></div>"; 
-		document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-		i++;
-	}
-    bBody="<div style=\"position: absolute; left: 3; top:119\"><img src=\"images/z.gif\" width=\""+String(18*nElem+10)+"\" height=\"3\"></img></div>";
-    bBody+="<div style=\"position: absolute; left: 3; top:279\"><img src=\"images/z.gif\" width=\""+String(18*nElem+10)+"\" height=\"3\"></img></div>";
-    bBody+="<div style=\"position: absolute; left: 14; top:283; width: 520; height: 60;\"></div>";
-
-	document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-	
-	diff=diff-4;
-	cF=diff%23;
-	cE=diff%28;
-	cI=diff%33;
-
-	i=0;
-	var Valore, c, Critico;
-	while( i < nElem)
-	{
-	    c=0;
-	    Critico=0;
-	    Valore=cF+i;
-	    if (Valore > -1)
-		{
-		    if (Valore >= 23) { Valore=Valore%23; }
-		    while( c < 3)
-			{
-			   if (Valore==acF[c]) {Critico=1;}
-			   c++;
-		    }
-			bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apF[Valore%apF.length])+"\">";
-		    
-		    if(Critico==1)
-			{
-			    bBody+="<img src=\"images/FR.gif\"></img></div>";
-		    } 
-			else if(Valore<(23/2))
-			{
-			    bBody+="<img src=\"images/FS.gif\"></img></div>";
-			} 
-		    else 
-		    {
-			    bBody+="<img src=\"images/FC.gif\"></img></div>";
-		    }
-			document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-	    }
-		i++;
-	}
-    i=0;
-    while( i < nElem)
-	{
-	    c=0;
-	    Critico=0;
-	    Valore=cE+i;
-	    if (Valore > -1)
-		{
-		    if (Valore >= 28){ Valore=Valore%28; }
-		    while( c < 2)
-		    {
-			    if (Valore==acE[c]) { Critico=1; }
-			    c++;
-		    }
-			bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apE[Valore%apE.length])+"\">";
-			    
-		    if(Critico==1)
-			{
-			    bBody+="<img src=\"images/ER.gif\"></img></div>";
-		    } 
-			else if (Valore<(28/2))
-			{
-		        bBody+="<img src=\"images/ES.gif\"></img></div>";
-			} 
-			else 
-			{
-			    bBody+="<img src=\"images/EC.gif\"></img></div>";
-			}
-			document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-		}
-		i++;
-	}
-    i=0;
-    while( i < nElem)
-	{
-	    c=0;
-	    Critico=0;
-	    Valore=cI+i;
-	    if (Valore > -1)
-		{
-		    if (Valore >= 33) { Valore=Valore%33; };
-		    while( c < 3)
-			{
-			    if (Valore==acI[c]) { Critico=1;}
-			    c++;
-		    }
-			bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apI[Valore%apI.length])+"\">";
-		    
-		    if (Critico==1)
-			{
-			    bBody+="<img src=\"images/IR.gif\"></img></div>";
-		    } 
-			else if (Valore<(33/2))
-			{
-			    bBody+="<img src=\"images/IS.gif\"></img></div>";
-		    } 
-			else
-			{
-			    bBody+="<img src=\"images/IC.gif\"></img></div>";
-		    }
-			document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-		}
-		i++;
-	}
-	var Valore1, Valore2, Valore3, Bi, Ci, Ai, Energia;
-	i=0;	
-	while( i < nElem)
-	{
-	    c=0;
-	    Valore1=cF+i;
-	    Valore2=cE+i;
-	    Valore3=cI+i;
-	    if (Valore1 > -1)
-		{
-		    if (Valore1 >= 23) {Valore1=Valore1-23;}
-		    if (Valore1 >= 23) {Valore1=Valore1-23;}
-		    if (Valore2 >= 28) {Valore2=Valore2-28;}
-		    if (Valore2 >= 28) {Valore2=Valore2-28;}
-		    if (Valore3 >= 33) {Valore3=Valore3-33;}
-		    if (Valore3 >= 33) {Valore3=Valore3-33;}
-		    Energia=avF[Valore1%avF.length]+avE[Valore2%avE.length]+avI[Valore3%avI.length];
-		    if (Energia < 21)
-		    {
-		        Bi="images/Bro.gif";
-			    Ci="images/Cro.gif";
-			    Ai="images/Aro.gif";
-		    } 
-		    else if (Energia < 33)
-		    {
-			    Bi="images/Bsa.gif";
-			    Ci="images/Csa.gif";
-			    Ai="images/Ara.gif";
-		    } 
-			else if(Energia < 45)
-		    {
-			    Bi="images/Bgo.gif";
-				Ci="images/Cgo.gif";
-				Ai="images/Ago.gif";
-			} 
-			else
-			{
-			     Bi="images/Bbu.gif";
-				 Ci="images/Cbu.gif";
-				 Ai="images/Abu.gif";
-			}
-            bBody="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: 272\"><img src=\""+Bi+"\" width=\"18\" height=\"4\"></div>";
-			bBody+="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: "+String(272-Energia)+"\"><img src=\""+Ci+"\" width=\"18\" height=\""+String(Energia)+"\"></div>";
-			bBody+="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: "+String(272-Energia-4)+"\"><img src=\""+Ai+"\" width=\"18\" height=\"4\"></div>";
-		    document.body.insertAdjacentHTML("BeforeEnd", bBody); 
-		}
-		i++;
-	}
+if(ThisDayC<1){
+  ThisMonthC=ThisMonth-1;
+  if(ThisMonthC<1){
+     ThisMonthC=ThisMonthC+12;
+     ThisYearC=ThisYear-1;
+  } 
+  if((ThisYearC%4)==0){
+     ThisDayC=ThisDayC+md[ThisMonthC-1];
+  }else{
+     ThisDayC=ThisDayC+mn[ThisMonthC-1];
+  }
+}
+while( i < nElem){
+  if((ThisYearC%4)==0){
+    if((ThisDayC+i)>md[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
+  }else{
+    if((ThisDayC+i)>mn[ThisMonthC-1]){ ThisDayC=1; ThisMonthC=ThisMonthC+1; }
+  }
+  if(ThisMonthC > 12){ ThisMonthC=1; ThisYearC = ThisYearC +1; }
+  Data=new Date(String(ThisMonthC)+"/"+String(ThisDayC+i)+"/"+String(ThisYearC));
+  index=Data.getDate();
+  if(i==4){
+    bBody="<img style=\"position: absolute; left: "+String(18*(i)+8)+"; top: 0\" src=\"images/d.gif\" width=\"18\" height=\"330\"></img>";
+  }else{
+    bBody="<img style=\"position: absolute; left: "+String(18*(i)+8)+"; top: 0\" src=\"images/b.gif\"  width=\"18\" height=\"330\"></img>";
+  }
+  if(index <10){ index = "0"+index; }		    
+  bBody+="<div style=\"position: absolute; left: "+String(18*(i)+10)+"; top: 274\"><H5><b>"+index+"</b></H5></div>"; 
+  document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+  i++;
+}
+bBody="<div style=\"position: absolute; left: 3; top:119\"><img src=\"images/z.gif\" width=\""+String(18*nElem+10)+"\" height=\"3\"></img></div>";
+bBody+="<div style=\"position: absolute; left: 3; top:279\"><img src=\"images/z.gif\" width=\""+String(18*nElem+10)+"\" height=\"3\"></img></div>";
+bBody+="<div style=\"position: absolute; left: 14; top:283; width: 520; height: 60;\"></div>";
+document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+diff=diff-4;
+cF=diff%23;
+cE=diff%28;
+cI=diff%33;
+i=0;
+var Valore, c, Critico;
+while( i < nElem){
+  c=0;
+  Critico=0;
+  Valore=cF+i;
+  if(Valore > -1){
+    if(Valore >= 23){ Valore=Valore%23; }
+    while( c < 3){
+      if(Valore==acF[c]){Critico=1;}
+      c++;
+    }
+    bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apF[Valore%apF.length])+"\">";
+    if(Critico==1){
+      bBody+="<img src=\"images/FR.gif\"></img></div>";
+    }else if(Valore<(23/2)){
+      bBody+="<img src=\"images/FS.gif\"></img></div>";
+    }else{
+      bBody+="<img src=\"images/FC.gif\"></img></div>";
+    }
+    document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+  }
+  i++;
+}
+i=0;
+while( i < nElem)
+{
+  c=0;
+  Critico=0;
+  Valore=cE+i;
+  if(Valore > -1){
+    if(Valore >= 28){ Valore=Valore%28; }
+    while( c < 2){
+      if(Valore==acE[c]) { Critico=1; }
+      c++;
+    }
+    bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apE[Valore%apE.length])+"\">";
+    if(Critico==1){
+      bBody+="<img src=\"images/ER.gif\"></img></div>";
+    }else if (Valore<(28/2)){
+      bBody+="<img src=\"images/ES.gif\"></img></div>";
+    }else{
+      bBody+="<img src=\"images/EC.gif\"></img></div>";
+    }
+    document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+  }
+  i++;
+}
+i=0;
+while( i < nElem)
+{
+  c=0;
+  Critico=0;
+  Valore=cI+i;
+  if(Valore > -1){
+    if(Valore >= 33) { Valore=Valore%33; };
+    while( c < 3){
+      if(Valore==acI[c]) { Critico=1;}
+      c++;
+    }
+    bBody="<div style=\"position: absolute; left: "+String(18*(i)+8)+"; top: "+String(110+apI[Valore%apI.length])+"\">";
+    if(Critico==1){
+      bBody+="<img src=\"images/IR.gif\"></img></div>";
+    }else if (Valore<(33/2)){
+      bBody+="<img src=\"images/IS.gif\"></img></div>";
+    }else{
+      bBody+="<img src=\"images/IC.gif\"></img></div>";
+    }
+    document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+  }
+  i++;
+}
+var Valore1, Valore2, Valore3, Bi, Ci, Ai, Energia;
+i=0;	
+while( i < nElem)
+{
+  c=0;
+  Valore1=cF+i;
+  Valore2=cE+i;
+  Valore3=cI+i;
+  if(Valore1 > -1){
+    if(Valore1 >= 23) {Valore1=Valore1-23;}
+    if(Valore1 >= 23) {Valore1=Valore1-23;}
+    if(Valore2 >= 28) {Valore2=Valore2-28;}
+    if(Valore2 >= 28) {Valore2=Valore2-28;}
+    if(Valore3 >= 33) {Valore3=Valore3-33;}
+    if(Valore3 >= 33) {Valore3=Valore3-33;}
+    Energia=avF[Valore1%avF.length]+avE[Valore2%avE.length]+avI[Valore3%avI.length];
+    if(Energia < 21){
+      Bi="images/Bro.gif";
+      Ci="images/Cro.gif";
+      Ai="images/Aro.gif";
+    }else if(Energia < 33){
+      Bi="images/Bsa.gif";
+      Ci="images/Csa.gif";
+      Ai="images/Ara.gif";
+    } 
+    else if(Energia < 45){
+      Bi="images/Bgo.gif";
+      Ci="images/Cgo.gif";
+      Ai="images/Ago.gif";
+    }else{
+      Bi="images/Bbu.gif";
+      Ci="images/Cbu.gif";
+      Ai="images/Abu.gif";
+    }
+    bBody="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: 272\"><img src=\""+Bi+"\" width=\"18\" height=\"4\"></div>";
+    bBody+="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: "+String(272-Energia)+"\"><img src=\""+Ci+"\" width=\"18\" height=\""+String(Energia)+"\"></div>";
+    bBody+="<div style=\"position: absolute; left: "+String(18*(i)+8+1)+"; top: "+String(272-Energia-4)+"\"><img src=\""+Ai+"\" width=\"18\" height=\"4\"></div>";
+    document.body.insertAdjacentHTML("BeforeEnd", bBody); 
+  }
+  i++;
+}
 }
 
 function GetData()
@@ -297,138 +234,126 @@ function LoadInitFunc()
 	   if(src[1]){ document.all.Bday.value=src[1]; }
 	   if(src[2]){ document.all.Bmonth.value=src[2]; }
 	   if(src[3]){ document.all.Byear.value=src[3]; }
-	   
    }
+   document.all.Byear.focus();
 }
-
 function SaveTheProfile()
 {
     bBody="biorhythm.html?id="+document.all.Uname.value+"&"+document.all.Bday.value+"&"+document.all.Bmonth.value+"&"+document.all.Byear.value;
     alert("Add The Opened Page To Bookmarks");
     window.open(bBody,"_blank"); 
 }
-
-
 </script>
-
 <body onLoad="LoadInitFunc()">
-  <div id="mainDiv" name="mainDiv" align=left>
-    <TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=190>
-    <TR>
-	<TD>
-	   <div align=left>Current DATE </div>
-		 <SELECT size="1" style="width:50" id="ThisDay" name="ThisDay"> 
-			    <OPTION value="1" selected>&nbsp;&nbsp;1</OPTION>
-			    <OPTION value="2">&nbsp;&nbsp;2</OPTION>
-			    <OPTION value="3">&nbsp;&nbsp;3</OPTION>
-			    <OPTION value="4">&nbsp;&nbsp;4</OPTION>
-			    <OPTION value="5">&nbsp;&nbsp;5</OPTION>
-			    <OPTION value="6">&nbsp;&nbsp;6</OPTION>
-				<OPTION value="7">&nbsp;&nbsp;7</OPTION>
-				<OPTION value="8">&nbsp;&nbsp;8</OPTION>
-				<OPTION value="9">&nbsp;&nbsp;9</OPTION>
-				<OPTION value="10">10</OPTION>
-				<OPTION value="11">11</OPTION>
-				<OPTION value="12">12</OPTION>
-				<OPTION value="13">13</OPTION>
-				<OPTION value="14">14</OPTION>
-				<OPTION value="15">15</OPTION>
-				<OPTION value="16">16</OPTION>
-				<OPTION value="17">17</OPTION>
-				<OPTION value="18">18</OPTION>
-				<OPTION value="19">19</OPTION>
-				<OPTION value="20">20</OPTION>
-				<OPTION value="21">21</OPTION>
-				<OPTION value="22">22</OPTION>
-				<OPTION value="23">23</OPTION>
-				<OPTION value="24">24</OPTION>
-				<OPTION value="25">25</OPTION>
-				<OPTION value="26">26</OPTION>
-				<OPTION value="27">27</OPTION>
-				<OPTION value="28">28</OPTION>
-				<OPTION value="29">29</OPTION>
-				<OPTION value="30">30</OPTION>
-				<OPTION value="31">31</OPTION>
-			</SELECT>
-			<SELECT size="1" style="width:50" id="ThisMonth" name="ThisMonth">
-			    <OPTION value="1" selected>01</OPTION>
-				<OPTION value="2">02</OPTION>
-				<OPTION value="3">03</OPTION>
-				<OPTION value="4">04</OPTION>
-				<OPTION value="5">05</OPTION>
-				<OPTION value="6">06</OPTION>
-				<OPTION value="7">07</OPTION>
-				<OPTION value="8">08</OPTION>
-				<OPTION value="9">09</OPTION>
-				<OPTION value="10">10</OPTION>
-				<OPTION value="11">11</OPTION>
-				<OPTION value="12">12</OPTION>
-			</SELECT>
-			<INPUT align="center" size="4" id="ThisYear" name="ThisYear"></INPUT>
-			</TD> </TR>
-			<TR><TD>
-            <div align=left>Birthday</div>
-            
-			<SELECT size="1" style="width:50" id="Bday" name="Bday"> 
-			    <OPTION value="1" selected>&nbsp;&nbsp;1</OPTION>
-			    <OPTION value="2">&nbsp;&nbsp;2</OPTION>
-			    <OPTION value="3">&nbsp;&nbsp;3</OPTION>
-			    <OPTION value="4">&nbsp;&nbsp;4</OPTION>
-			    <OPTION value="5">&nbsp;&nbsp;5</OPTION>
-			    <OPTION value="6">&nbsp;&nbsp;6</OPTION>
-				<OPTION value="7">&nbsp;&nbsp;7</OPTION>
-				<OPTION value="8">&nbsp;&nbsp;8</OPTION>
-				<OPTION value="9">&nbsp;&nbsp;9</OPTION>
-				<OPTION value="10">10</OPTION>
-				<OPTION value="11">11</OPTION>
-				<OPTION value="12">12</OPTION>
-				<OPTION value="13">13</OPTION>
-				<OPTION value="14">14</OPTION>
-				<OPTION value="15">15</OPTION>
-				<OPTION value="16">16</OPTION>
-				<OPTION value="17">17</OPTION>
-				<OPTION value="18">18</OPTION>
-				<OPTION value="19">19</OPTION>
-				<OPTION value="20">20</OPTION>
-				<OPTION value="21">21</OPTION>
-				<OPTION value="22">22</OPTION>
-				<OPTION value="23">23</OPTION>
-				<OPTION value="24">24</OPTION>
-				<OPTION value="25">25</OPTION>
-				<OPTION value="26">26</OPTION>
-				<OPTION value="27">27</OPTION>
-				<OPTION value="28">28</OPTION>
-				<OPTION value="29">29</OPTION>
-				<OPTION value="30">30</OPTION>
-				<OPTION value="31">31</OPTION>
-			</SELECT>
-			<SELECT size="1" style="width:50" id="Bmonth" name="Bmonth"> 
-			    <OPTION value="1" selected>01</OPTION>
-				<OPTION value="2">02</OPTION>
-				<OPTION value="3">03</OPTION>
-				<OPTION value="4">04</OPTION>
-				<OPTION value="5">05</OPTION>
-				<OPTION value="6">06</OPTION>
-				<OPTION value="7">07</OPTION>
-				<OPTION value="8">08</OPTION>
-				<OPTION value="9" >09</OPTION>
-				<OPTION value="10">10</OPTION>
-				<OPTION value="11">11</OPTION>
-				<OPTION value="12">12</OPTION>
-			</SELECT>
-			  <INPUT align=right size="4" value="2000" id="Byear" name="Byear"></INPUT>
-		   </TD>
-		   </TR>
-		   <TR>
-		   <TD>
-		   <div align=left>Your Name</div>
-		   <INPUT align=right size="12" value="" id="Uname" name="Uname" ></INPUT>&nbsp;
-		   <BUTTON onclick="SaveTheProfile()">Save</BUTTON>
-		   </TD>
-		   </TR>
-		   </TABLE>
-      <div><TR><b>Number Of Days<b>&nbsp;&nbsp;<input id="NMD" name="NMD" size="2" value="28"></input></br>
-	  <BUTTON onclick="GetData()">- - - - Calculate - - - -</BUTTON></TR></div>
+<div id="mainDiv" name="mainDiv" align=left>
+<TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=190>
+<TR><TD><div align=left>Current DATE </div>
+  <SELECT size="1" style="width:50" id="ThisDay" name="ThisDay"> 
+    <OPTION value="1" selected>&nbsp;&nbsp;1</OPTION>
+    <OPTION value="2">&nbsp;&nbsp;2</OPTION>
+    <OPTION value="3">&nbsp;&nbsp;3</OPTION>
+    <OPTION value="4">&nbsp;&nbsp;4</OPTION>
+    <OPTION value="5">&nbsp;&nbsp;5</OPTION>
+    <OPTION value="6">&nbsp;&nbsp;6</OPTION>
+    <OPTION value="7">&nbsp;&nbsp;7</OPTION>
+    <OPTION value="8">&nbsp;&nbsp;8</OPTION>
+    <OPTION value="9">&nbsp;&nbsp;9</OPTION>
+    <OPTION value="10">10</OPTION>
+    <OPTION value="11">11</OPTION>
+    <OPTION value="12">12</OPTION>
+    <OPTION value="13">13</OPTION>
+    <OPTION value="14">14</OPTION>
+    <OPTION value="15">15</OPTION>
+    <OPTION value="16">16</OPTION>
+    <OPTION value="17">17</OPTION>
+    <OPTION value="18">18</OPTION>
+    <OPTION value="19">19</OPTION>
+    <OPTION value="20">20</OPTION>
+    <OPTION value="21">21</OPTION>
+    <OPTION value="22">22</OPTION>
+    <OPTION value="23">23</OPTION>
+    <OPTION value="24">24</OPTION>
+    <OPTION value="25">25</OPTION>
+    <OPTION value="26">26</OPTION>
+    <OPTION value="27">27</OPTION>
+    <OPTION value="28">28</OPTION>
+    <OPTION value="29">29</OPTION>
+    <OPTION value="30">30</OPTION>
+    <OPTION value="31">31</OPTION>
+  </SELECT>
+  <SELECT size="1" style="width:50" id="ThisMonth" name="ThisMonth">
+    <OPTION value="1" selected>01</OPTION>
+    <OPTION value="2">02</OPTION>
+    <OPTION value="3">03</OPTION>
+    <OPTION value="4">04</OPTION>
+    <OPTION value="5">05</OPTION>
+    <OPTION value="6">06</OPTION>
+    <OPTION value="7">07</OPTION>
+    <OPTION value="8">08</OPTION>
+    <OPTION value="9">09</OPTION>
+    <OPTION value="10">10</OPTION>
+    <OPTION value="11">11</OPTION>
+    <OPTION value="12">12</OPTION>
+  </SELECT>
+  <INPUT align="center" size="4" id="ThisYear" name="ThisYear"></INPUT>
+</TD> </TR>
+<TR><TD><div align=left>Birthday</div>
+  <SELECT size="1" style="width:50" id="Bday" name="Bday"> 
+    <OPTION value="1" selected>&nbsp;&nbsp;1</OPTION>
+    <OPTION value="2">&nbsp;&nbsp;2</OPTION>
+    <OPTION value="3">&nbsp;&nbsp;3</OPTION>
+    <OPTION value="4">&nbsp;&nbsp;4</OPTION>
+    <OPTION value="5">&nbsp;&nbsp;5</OPTION>
+    <OPTION value="6">&nbsp;&nbsp;6</OPTION>
+    <OPTION value="7">&nbsp;&nbsp;7</OPTION>
+    <OPTION value="8">&nbsp;&nbsp;8</OPTION>
+    <OPTION value="9">&nbsp;&nbsp;9</OPTION>
+    <OPTION value="10">10</OPTION>
+    <OPTION value="11">11</OPTION>
+    <OPTION value="12">12</OPTION>
+    <OPTION value="13">13</OPTION>
+    <OPTION value="14">14</OPTION>
+    <OPTION value="15">15</OPTION>
+    <OPTION value="16">16</OPTION>
+    <OPTION value="17">17</OPTION>
+    <OPTION value="18">18</OPTION>
+    <OPTION value="19">19</OPTION>
+    <OPTION value="20">20</OPTION>
+    <OPTION value="21">21</OPTION>
+    <OPTION value="22">22</OPTION>
+    <OPTION value="23">23</OPTION>
+    <OPTION value="24">24</OPTION>
+    <OPTION value="25">25</OPTION>
+    <OPTION value="26">26</OPTION>
+    <OPTION value="27">27</OPTION>
+    <OPTION value="28">28</OPTION>
+    <OPTION value="29">29</OPTION>
+    <OPTION value="30">30</OPTION>
+    <OPTION value="31">31</OPTION>
+  </SELECT>
+  <SELECT size="1" style="width:50" id="Bmonth" name="Bmonth">
+    <OPTION value="1" selected>01</OPTION>
+    <OPTION value="2">02</OPTION>
+    <OPTION value="3">03</OPTION>
+    <OPTION value="4">04</OPTION>
+    <OPTION value="5">05</OPTION>
+    <OPTION value="6">06</OPTION>
+    <OPTION value="7">07</OPTION>
+    <OPTION value="8">08</OPTION>
+    <OPTION value="9" >09</OPTION>
+    <OPTION value="10">10</OPTION>
+    <OPTION value="11">11</OPTION>
+    <OPTION value="12">12</OPTION>
+  </SELECT>
+  <INPUT align=right size="4" value="2000" id="Byear" name="Byear"></INPUT>
+</TD></TR>
+<TR><TD><div align=left>Your Name</div>
+  <INPUT align=right size="12" value="" id="Uname" name="Uname" ></INPUT>&nbsp;
+  <BUTTON onclick="SaveTheProfile()">Save</BUTTON>
+</TD></TR>
+</TABLE>
+<div><TR><b>Number Of Days<b>&nbsp;&nbsp;<input id="NMD" name="NMD" size="2" value="28"></input></br>
+  <BUTTON onclick="GetData()">- - - - Calculate - - - -</BUTTON></TR></div>
 </div>
 <br></br>
 <div>
@@ -440,8 +365,5 @@ function SaveTheProfile()
 &nbsp;&nbsp;
 <A HREF="https://account.xbox.com/en-us/profile?gamertag=AM71113363"><IMG style="width:40px;height:40px;" src="https://xbox.com/favicon.ico"></IMG></A>
 </div>
-
 </BODY>
 </HTML>
-
-
