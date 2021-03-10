@@ -6,6 +6,7 @@
 
 function PLCOnvert(a)
 {
+    var Link;
     var URL = document.all.A.value;
     if(URL)
     {
@@ -13,9 +14,13 @@ function PLCOnvert(a)
        if(id)
        {
          var Cid = id.split('&')[0];
-         var Link="https://"+a+Cid;
-         window.open(Link,"_blank");
-        }   
+         Link="https://"+a+Cid;
+       }
+       else
+       {
+         Link="https://"+a+URL;
+       }
+       window.open(Link,"_blank");
     }else{ alert("Is This a JOke????"); } 
 }
 
@@ -25,12 +30,13 @@ function PLCOnvert(a)
   <TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=320>
     <TR><td>
       
-      <div align=left>PlayStore App URL</div>
+      <div align=left>PlayStore App URL or Package Name</div>
       <INPUT ID="A" TYPE="TEXT" NAME="A" style="width:300px;">
       <BUTTON onclick="PLCOnvert('apkpure.com/en/')">To ApkPure</BUTTON>&nbsp;
       <BUTTON onclick="PLCOnvert('apk.support/app/')">To ApkSupport</BUTTON>&nbsp;
       <BUTTON onclick="PLCOnvert('apkgk.com/')">To apkgk</BUTTON>
-    </TD></TR>
+      <BUTTON onclick="PLCOnvert('apktada.com/app/')">To apktada</BUTTON>
+   </TD></TR>
   </TABLE>
 </div>
 <br></br>
