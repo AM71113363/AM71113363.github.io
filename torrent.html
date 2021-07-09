@@ -49,8 +49,25 @@ function GetTorrent()
        window.open(temp,"_blank");     
     } else{ alert("Is This a JOke????"); }
 }
+function LoadInitFunc()
+{ 
+    var name;
+    var src = location.search.split('?')[1]; 
+    if(src)
+    { 
+        name=src.split('&'); 
+        if(name[0])
+        { 
+            document.all.torrentHash.value=name[0]; 
+        }
+        if(name[1])
+        {
+            document.all.torrentName.value=name[1];
+        }
+    }
+}
 </SCRIPT>
-<body>
+<body onLoad="LoadInitFunc()">
   <div align=left>
   <TABLE bgcolor=ffffcc cellpadding=2 cellspacing=3 Border=3 WIDTH=320>
     <TR><td>
