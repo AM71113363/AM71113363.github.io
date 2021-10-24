@@ -27,7 +27,8 @@ function RemoveGame(thisGame)
 
 function GO(ctg) 
 {
-    var TT = "https://m.twitch.tv/directory/game/"+ctg+"?tl=Tag%7D%7C%7B"+document.all.language.value;
+    //var TT = "https://m.twitch.tv/directory/game/"+ctg+"?tl=Tag%7D%7C%7B"+document.all.language.value;
+    var TT = "https://m.twitch.tv/directory/game/"+ctg+"?tl="+document.all.language.value;
     window.open(TT,"_blank");  
 } 
 
@@ -187,13 +188,13 @@ function GetSomeInfo()
 <BUTTON onclick="AddNewGame()">Add New Game</BUTTON>
 </DIV> 
 <DIV id="HowToUseIt" name="HowToUseIt" style="visibility:hidden">
-<H2>
+<H3>
 <div>This WebPage do not use Cookies, so you have to save it as BOOKMARK.</div>
 <div>1. If you want to change the default language click [ Save ].</div>
 <div>2. Click [ Add New Game ] //I used Minecraft as an example(You can add more).</div>
 <div>NOTE: Game Names are CASE SENSITIVE</div>
 <div>I'm using this <A href="/TwitchFilter.html?AM=15AM=MinecraftAM=Just ChattingAM=VALORANTAM=Fortnite">Bookmark</A></div>
-</H2>
+</H3>
 <div><H1> How To Use It?</H1></div>
 <H3>
 <div>After adding at least 1 game:</div>
