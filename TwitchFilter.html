@@ -1,0 +1,171 @@
+<html>
+<head>
+<title>TwitchFilter</title>
+<meta name=viewport content="width=device-width"></head>
+
+<script type="text/javascript">
+
+function RemoveGame(thisGame)
+{
+   var TT="/TwitchFilter.html?";
+   var src = location.search.split('?')[1];
+   if(src)
+   {
+       var ad="C="+thisGame;
+       var fn=src.split(ad);
+       if(fn[0]){ TT+=fn[0]; }
+       if(fn[1]){ TT+=fn[1]; }
+       if(fn[2]){ TT+=fn[2]; }   
+   }
+   window.location.href=TT;
+}
+
+function GO(ctg) 
+{
+    var TT = "https://twitch.tv/directory/game/"+ctg+"?tl=Tag%7D%7C%7B"+document.all.language.value;
+    window.open(TT,"_blank");  
+} 
+
+function AddNewGame()
+{
+    var TT="/TwitchFilter.html"+location.search;
+    var ad = document.all.newgame.value;
+    if(ad.length > 1)
+    {
+       TT+="C="+ad;
+       window.location.href=TT;
+    }
+}
+
+function SaveMyLanguage()
+{
+  var n = document.getElementById("language");
+  var TT="/TwitchFilter.html?L="+n.selectedIndex;
+  var src = location.search.split('L=')[1];
+  if(src)
+  {
+      var ad=src.split('&')[1];
+      if(ad)
+      {
+         TT+="&"+ad;
+      }
+   }
+   else
+   {
+     src = location.search.split('?')[1];
+     
+     if(src) { TT+="&"+src; }
+   }  
+     
+  window.location.href=TT;
+}
+
+function GetSomeInfo()
+{
+   var width;
+   var height;
+   var tu;
+   if(self.screen)
+   {
+         width = screen.width;
+         height = screen.height;
+   }
+   else if(self.java)
+   {
+        var javakit = java.awt.Toolkit.getDefaultToolkit();
+        var scrsize = javakit.getScreenSize();
+        width = scrsize.width;
+        height = scrsize.height;
+   }
+   else
+   {
+      width = '?';
+      height = '?';
+   }
+   tu = width + ":" + height + "<p><\/p>" + navigator.userAgent;
+   document.all.SomeInfo.innerHTML = tu;
+   
+   var src = location.search.split('L=')[1];
+   if(src)
+   {
+      var ad=src.split('&');
+      if(ad[0])
+      {
+         document.getElementById("language")[ad[0]].selected = true; 
+      }
+      else
+      {
+        document.getElementById("language")[src].selected = true;
+      }
+   }
+   var games = location.search.split('C=');
+   if(games[1])
+   {
+      var i;
+      for(i=1;i<games.length;i++)
+      {
+         
+         if(games[i])
+         {
+           var Lnk="&nbsp;<DIV><IMG onclick=\"GO('"+games[i]+"')\" align=\"center\" src=\"https://static-cdn.jtvnw.net/ttv-boxart/"+games[i]+"-138x184.jpg\" ></IMG><BUTTON onclick=\"RemoveGame('"+games[i]+"')\">Remove</BUTTON></DIV>";
+           document.body.insertAdjacentHTML("BeforeEnd", Lnk);
+         }
+         else
+         {
+         break;
+         }
+      }
+   }
+}
+
+</script>
+ 
+<body onload="GetSomeInfo()">
+<H3><DIV id="SomeInfo" name="SomeInfo"></DIV></H3><DIV>
+
+<SELECT  id="language" name="language" style="width:100px">
+<option value="73cc486a-e56b-41ed-a1df-7afedbc84f6f">Arabic</option>
+<option value="21d85c73-701f-4259-8c4e-4321265847b5">Bulgarian</option>
+<option value="b1650f8e-cf56-4e62-99e3-0142cfc7e081">Catalan</option>
+<option value="a6cddaba-f0ce-4526-9087-6de2f603a24d">Czech</option>
+<option value="74c92063-a389-4fd2-8460-b1bb82b04ec7">Chinese</option>
+<option value="0c8c6543-4019-47d0-9b8a-57a81ee6ace5">Chinese(C)</option>
+<option value="ab2975e3-b9ca-4b1a-a93e-fb61a5d5c3a4">Korean</option>
+<option value="43e598cc-918b-4247-b02c-b13543a1eac9">Danish</option>
+<option value="220eb274-ab25-425b-8a9b-826103404997">Finnish</option>
+<option value="6f655045-9989-4ef7-8f85-1edcec42d648">French</option>
+<option value="6ba1d230-e52f-4d81-b1e0-41f25a8a9f5d">Japanese</option>
+<option value="902f6815-a655-4918-99e7-48c74a71feac">Greek</option>
+<option value="56d53a63-f048-40a9-ab61-d363aa3b9c57">Hindi</option>
+<option value="8b1246f2-2cec-4b90-9d86-01ebdf13b848">Indonesian</option>
+<option value="6ea6bca4-4712-4ab9-a906-e3336a9d8039" selected >English</option>
+<option value="5b9935eb-1e9a-4217-98ad-62bda5cff0d1">Italian</option>
+<option value="5ad4b978-495f-4093-9461-c194f58201ab">American Sign</option>
+<option value="34a56dbd-6add-49e6-83b6-cffacbf18bcd">Malaysian</option>
+<option value="5647bf35-f99e-49aa-8578-0e07d936188c">Norwegian</option>
+<option value="e13e6734-37ae-4d85-897b-3015f0168355">Dutch</option>
+<option value="f9d04efa-6e25-49bf-bf0a-da3e2addaf1b">Polish</option>
+<option value="39ee8140-901a-4762-bfca-8260dea1310f">Portugese</option>
+<option value="75a99c80-0f15-4159-b1fd-3812c25b4aca">Romanian</option>
+<option value="0569b171-2a2b-476e-a596-5bdfb45a1327">Russian</option>
+<option value="9b773670-05f8-4c06-ac99-e6649f906171">Slovak</option>
+<option value="d4bb9c58-2141-4881-bcdc-3fe0505457d1">Spanish</option>
+<option value="145b073b-cb70-4e91-b170-f5fab2ebba05">Swedish</option>
+<option value="91d21edf-9d63-4ac8-9508-5448c3daf3f0">Tagalog</option>
+<option value="f19c7524-c18d-41af-9f39-034c8d0b0fee">Thai</option>
+<option value="9166ad14-41f1-4b04-a3b8-c8eb838c6be6">German</option>
+<option value="f08d5873-f0c7-4912-94ba-a41933b4c141">Turkish</option>
+<option value="b547f13b-4b4b-460f-97e6-3af350356a69">Ukrainian</option>
+<option value="a298cca5-d408-47c7-a1e7-0c76ca878bc6">Hungarian</option>
+<option value="ba3b69fe-899c-4518-ac46-707275e3eba1">Vietnamese</option>
+<option value="fd76c790-0505-4c4c-865a-d6bd139c0901">Other Languages</option>
+</SELECT>
+<BUTTON  ID="MainButton" NAME="MainButton" onclick="SaveMyLanguage()">Save</BUTTON>
+</DIV>
+<DIV> 
+<INPUT id="newgame" name="newgame" TYPE="TEXT" SIZE="28"></INPUT> 
+<BUTTON onclick="AddNewGame()">Add New Game</BUTTON>
+</DIV> 
+</body> 
+</html> 
+ 
