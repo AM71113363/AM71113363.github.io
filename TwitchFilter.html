@@ -4,7 +4,7 @@
 <meta name=viewport content="width=device-width"></head>
 
 <script type="text/javascript">
-
+let firstTime = 0;
 function RemoveGame(thisGame)
 {
    var TT="/TwitchFilter.html";
@@ -91,7 +91,7 @@ function GetSomeInfo()
    }
    tu = width + ":" + height + "<p><\/p>" + navigator.userAgent;
    document.all.SomeInfo.innerHTML = tu;
-   tu=0;
+   firstTime=0;
    var games = location.search.split('AM=');
    if(games[1])
    {
@@ -108,13 +108,13 @@ function GetSomeInfo()
               {
                  var Lnk="&nbsp;<DIV><IMG onclick=\"GO('"+games[i]+"')\" align=\"center\" src=\"https://static-cdn.jtvnw.net/ttv-boxart/"+games[i]+"-138x184.jpg\" ></IMG><BUTTON onclick=\"RemoveGame('"+games[i]+"')\">Remove</BUTTON></DIV>";
                  document.body.insertAdjacentHTML("BeforeEnd", Lnk);
-                 tu=1;
+                 firstTime=1;
               }
           }
           else{ break; }
       }
    }
-   if(tu==1)
+   if(firstTime==1)
    { 
       var info=document.getElementById('HowToUseIt'); 
       info.parentNode.removeChild(info);
