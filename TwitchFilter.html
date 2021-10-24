@@ -7,15 +7,20 @@
 
 function RemoveGame(thisGame)
 {
-   var TT="/TwitchFilter.html?";
+   var TT="/TwitchFilter.html";
+   var pre="?"; var empty=0;
    var src = location.search.split('?')[1];
    if(src)
    {
-       var ad="C="+thisGame;
+       var ad="AM="+thisGame;
        var fn=src.split(ad);
-       if(fn[0]){ TT+=fn[0]; }
-       if(fn[1]){ TT+=fn[1]; }
-       if(fn[2]){ TT+=fn[2]; }   
+       if(fn[0]){ pre+=fn[0]; empty=1;}
+       if(fn[1]){ pre+=fn[1]; empty=1;}
+       if(fn[2]){ pre+=fn[2]; empty=1;}
+       if(empty==1)
+       {
+          TT+=pre;
+       }   
    }
    window.location.href=TT;
 }
@@ -28,11 +33,12 @@ function GO(ctg)
 
 function AddNewGame()
 {
-    var TT="/TwitchFilter.html"+location.search;
+    var TT="/TwitchFilter.html";
+    if(location.search){ TT+=location.search; }else{ TT+="?"; }
     var ad = document.all.newgame.value;
     if(ad.length > 1)
     {
-       TT+="C="+ad;
+       TT+="AM="+ad;
        window.location.href=TT;
     }
 }
@@ -40,23 +46,24 @@ function AddNewGame()
 function SaveMyLanguage()
 {
   var n = document.getElementById("language");
-  var TT="/TwitchFilter.html?L="+n.selectedIndex;
-  var src = location.search.split('L=')[1];
-  if(src)
+  var TT="/TwitchFilter.html?AM="+n.selectedIndex;
+ 
+  var games = location.search.split('AM=');
+  if(games[1])
   {
-      var ad=src.split('&')[1];
-      if(ad)
+      var i;
+      for(i=1;i<games.length;i++)
       {
-         TT+="&"+ad;
+         if(games[i])
+         {
+              if(games[i].length > 3) 
+              {
+                 TT+="AM="+games[i];
+              }
+          }
+          else{ break; }
       }
-   }
-   else
-   {
-     src = location.search.split('?')[1];
-     
-     if(src) { TT+="&"+src; }
-   }  
-     
+   } 
   window.location.href=TT;
 }
 
@@ -84,37 +91,37 @@ function GetSomeInfo()
    }
    tu = width + ":" + height + "<p><\/p>" + navigator.userAgent;
    document.all.SomeInfo.innerHTML = tu;
-   
-   var src = location.search.split('L=')[1];
-   if(src)
-   {
-      var ad=src.split('&');
-      if(ad[0])
-      {
-         document.getElementById("language")[ad[0]].selected = true; 
-      }
-      else
-      {
-        document.getElementById("language")[src].selected = true;
-      }
-   }
-   var games = location.search.split('C=');
+   tu=0;
+   var games = location.search.split('AM=');
    if(games[1])
    {
       var i;
       for(i=1;i<games.length;i++)
       {
-         
          if(games[i])
          {
-           var Lnk="&nbsp;<DIV><IMG onclick=\"GO('"+games[i]+"')\" align=\"center\" src=\"https://static-cdn.jtvnw.net/ttv-boxart/"+games[i]+"-138x184.jpg\" ></IMG><BUTTON onclick=\"RemoveGame('"+games[i]+"')\">Remove</BUTTON></DIV>";
-           document.body.insertAdjacentHTML("BeforeEnd", Lnk);
-         }
-         else
-         {
-         break;
-         }
+              if(games[i].length < 3) 
+              {
+                 document.getElementById("language")[games[i]].selected = true;
+              }
+              else
+              {
+                 var Lnk="&nbsp;<DIV><IMG onclick=\"GO('"+games[i]+"')\" align=\"center\" src=\"https://static-cdn.jtvnw.net/ttv-boxart/"+games[i]+"-138x184.jpg\" ></IMG><BUTTON onclick=\"RemoveGame('"+games[i]+"')\">Remove</BUTTON></DIV>";
+                 document.body.insertAdjacentHTML("BeforeEnd", Lnk);
+                 tu=1;
+              }
+          }
+          else{ break; }
       }
+   }
+   if(tu==1)
+   { 
+      var info=document.getElementById('HowToUseIt'); 
+      info.parentNode.removeChild(info);
+   }
+   else
+   { 
+      document.all.newgame.value="Minecraft";
    }
 }
 
@@ -166,6 +173,27 @@ function GetSomeInfo()
 <INPUT id="newgame" name="newgame" TYPE="TEXT" SIZE="28"></INPUT> 
 <BUTTON onclick="AddNewGame()">Add New Game</BUTTON>
 </DIV> 
+<DIV id="HowToUseIt" name="HowToUseIt">
+<H2>
+<div>This WebPage do not use Cookies, so you have to save it as BOOKMARK.</div>
+<div>1. If you want to change the default language click [ Save ].</div>
+<div>2. Click [ Add New Game ] //I used Minecraft as an example(You can add more).</div>
+<div>NOTE: Game Names are CASE SENSITIVE</div>
+<div>I'm using this <A href="/TwitchFilter.html?AM=15AM=MinecraftAM=Just ChattingAM=VALORANTAM=Fortnite">Bookmark</A></div>
+</H2>
+<div><H1> How To Use It?</H1></div>
+<H3>
+<div>After adding at least 1 game:</div>
+<div>Example: I want to view Users with language filter "English" & "Italian".</div>
+<div>1.Set the language filter to "English".(dont click save, the save is only for the default language).</div>
+<div>Click on the Game Image.</div>
+<div>Change language filter to "Italian".</div>
+<div>Click on the Game Image.</div>
+</H3>
+</DIV>
+
+
+</DIV>
 </body> 
 </html> 
  
