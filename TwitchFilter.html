@@ -121,7 +121,9 @@ function GetSomeInfo()
    }
    else
    { 
-      document.all.newgame.value="Minecraft";
+     var info=document.getElementById('HowToUseIt');
+     info.style.visibility='visible'; 
+    document.all.newgame.value="Minecraft";
    }
 }
 
@@ -184,7 +186,7 @@ function GetSomeInfo()
 <INPUT id="newgame" name="newgame" TYPE="TEXT" SIZE="28"></INPUT> 
 <BUTTON onclick="AddNewGame()">Add New Game</BUTTON>
 </DIV> 
-<DIV id="HowToUseIt" name="HowToUseIt">
+<DIV id="HowToUseIt" name="HowToUseIt" style="visibility:hidden">
 <H2>
 <div>This WebPage do not use Cookies, so you have to save it as BOOKMARK.</div>
 <div>1. If you want to change the default language click [ Save ].</div>
