@@ -1,11 +1,1 @@
-function grabS()
-{
-alert("this a test");
-}
-
-function addMe()
-{
-var temp="<button onclick=\"mmm()\">uuu</button>";
-document.body.insertAdjacentHTML("AfterBegin",temp);
-}
-alert("Loaded");
+javascript:(function(){var a=window.open('about:blank').document;a.write("<html><head><script>function go(){document.all.d.innerHTML=document.body.innerHTML;var t=document.all.d.value;var h=t.split('\"display_url\":\"');if(h[1]){for(i=1;i<h.length;i++){var b=h[i].split('\"');var c=b[0].replace(/&amp;/g,'&');var d=c.replace(/\\\\u0026/g,'&');var tp='<div><a href=\"'+d+'\" target=\"_blank\"><H1>Image_'+i+'</H1></img></div>';document.body.insertAdjacentHTML('AfterBegin',tp);}}h=t.split('\"video_url\":\"');if(h[1]){for(i=1;i<h.length;i++){var b=h[i].split('\"');var c=b[0].replace(/&amp;/g,'&');var d=c.replace(/\\\\u0026/g,'&');var tp='<div><a href=\"'+d+'\" target=\"_blank\"><H1>Video_'+i+'</H1></img></div>';document.body.insertAdjacentHTML('AfterBegin',tp);}}}</script></head><body><button style=\"width:100%;height:200px\" onClick='go()'>GO</button><textarea style='visibility:hidden' id='d'></textarea></body></html>");a.close();var b=a.body.appendChild(a.createElement('pre'));b.style.visibility="hidden";b.appendChild(a.createTextNode(document.documentElement.innerHTML))})();
