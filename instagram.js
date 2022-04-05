@@ -1,6 +1,6 @@
-function mmm()
+function grabS()
 {
-alert("this is a test");
+document.all.d.innerHTML=document.body.innerHTML;
 }
 
 function addMe()
@@ -8,4 +8,3 @@ function addMe()
 var temp="<button onclick=\"mmm()\">uuu</button>";
 document.body.insertAdjacentHTML("AfterBegin",temp);
 }
-mmm();
