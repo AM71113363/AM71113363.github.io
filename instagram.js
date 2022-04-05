@@ -8,3 +8,4 @@ function addMe()
 var temp="<button onclick=\"mmm()\">uuu</button>";
 document.body.insertAdjacentHTML("AfterBegin",temp);
 }
+alert("Loaded");
