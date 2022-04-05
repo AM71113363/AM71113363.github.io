@@ -1,6 +1,6 @@
 function grabS()
 {
-document.all.d.innerHTML=document.body.innerHTML;
+alert("this a test");
 }
 
 function addMe()
