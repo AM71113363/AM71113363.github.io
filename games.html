@@ -2,10 +2,22 @@
 <head> 
 <title>Call of Duty : Clan Rules</title> 
 <meta name=viewport content="width=device-width"> 
-</head> 
-<body bgcolor=white> 
+</head>
+<script>
+function go()
+{
+var lng=navigator.language;
+if(lng && (lng[0]=='i') && (lng[1]=='t'))
+{
+document.all.eng.style.visibility='hidden';
+document.all.ita.style.visibility='visible';
+}
+}
+</script>
+<body bgcolor=white onload="go()"> 
 <H1>Call of Duty : Clan Rules</H1>
 <br></br>
+<DIV id="eng" name="eng">
 <div>
 <strong>1.</strong> It doesn't matter if the Player gets points for the Clan or not.
 </div>
@@ -24,12 +36,6 @@
 <div>
 <strong>4.</strong> You don't have to do nothing for the Clan, just play the games you like.
 </div>
-<br></br>
-<H2>Note:</H2>
-<div>
-Do not ask to join the Clan if the Clan is full.
-I can't remove a Player if He/She doesn't break the Rules.
-</div>
 <bt></br>
 <H2>Tips:</H2>
 <div>
@@ -46,6 +52,44 @@ and if you want you can unlock Aether Crystal camo.
 ● Click <a href="/videos/HowToPlay_in_ClanWars.mp4">here</a> if
 you don't know how to play for the Clan.
 </div>
+</DIV>
+
+<DIV id="ita" name="ita" style="visibility:hidden">
+<div>
+<strong>1.</strong> Non importa se il giocatore ottiene punti per il Clan o meno.
+</div>
+<div>
+<strong>2.</strong> Importante e' di Login ogni tanto,giocare e' opzionale.
+</div>
+<div>
+<strong>3.</strong> Il giocatore che non ha effettuato il LogIn per 5 o 6 giorni sara' rimosso dal Clan.
+<div>
+&nbsp;&nbsp;•5 giorni per i giocatori che hanno 0 oppure pochi punti.
+</div>
+<div>
+&nbsp;&nbsp;•6 giorni per i giocatori che sono stati attivi nell'ultima settimana.
+</div>
+</div>
+<div>
+<strong>4.</strong> Non devi fare nulla per il Clan, gioca ai giochi che ti piacciono.
+</div>
+<bt></br>
+<H2>Consigli:</H2>
+<div>
+● Scegli la tua arma preferita a cerca di migliorarla,
+senza uno scopo il gioco inizia a diventare un po' noioso.
+<br></br>
+● Gioca nelle mappe piu' piccole come Shipment/Crash/Nuketown,
+su mappe piu' grandi perderai tempo a correre,ecc...
+<br></br>
+● Per le Carte Xp gioca a Zombies->difficile,
+dura circa 30 minutes e puoi ottenere 32 Carte,
+e se vuoi puoi sbloccare le mimetiche Cristallo Etereo.
+<br></br>
+● Clicca <a href="/videos/HowToPlay_in_ClanWars.mp4">qui</a> se
+non sai come giocare per il Clan.
+</div>
+</DIV>
 </body> 
 </html> 
  
