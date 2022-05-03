@@ -9,7 +9,7 @@ function go()
 var lng=navigator.language;
 if(lng && (lng[0]=='i') && (lng[1]=='t'))
 {
-document.all.eng.style.visibility='hidden';
+document.all.eng.parentNode.removeChild(document.all.eng);
 document.all.ita.style.visibility='visible';
 }
 }
