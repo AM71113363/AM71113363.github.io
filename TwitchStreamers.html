@@ -40,14 +40,13 @@ function updateLocation()
 {
     var sr = location.href.split('?')[0];
     var slt=document.all.allusers;
-    var i=1;
+    let i=1;
     sr+="?"+slt.options[0].value;
     if(slt.options.length > 1)
     {
-    while(slt.options[i])
+    for(i=1;i<slt.options.length;i++)
     {
        sr+="&"+slt.options[i].value;
-       i++;
     }
     }
 alert("Save The new Page as BookMark and delete the previous one if you don't need it");
