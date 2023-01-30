@@ -1,0 +1,145 @@
+<html> 
+<head> 
+<title>TwitchStreamers</title> 
+<meta name=viewport content="width=device-width"> 
+</head> 
+<script>
+var SHS=0;
+function GO(user)
+{
+    var TT = "https://player.twitch.tv/?channel="+user+"&parent=streamersnews.example.com";
+    window.open(TT,"_blank");
+}
+
+function RefreshMe(id)
+{
+  var tt=document.getElementById(id).src.split('?');
+  document.getElementById(id).src = tt[0]+"?id="+new Date().getTime();
+}
+
+function HandleUser(responce,user,i)
+{
+    var p = responce.split('404_preview-')[1];
+    let newopt= new Option(user,user);
+    document.all.allusers.appendChild(newopt);
+    if(p){ return; }
+    document.all.offline.style.visibility='hidden';
+    var temp="<div><img id=\"d"+i+"\" onclick=\"RefreshMe('d"+i+"')\" src=\"https://static-cdn.jtvnw.net/previews-ttv/live_user_"+user+"-414x233.jpg?id=12345678\" ></IMG>";
+    temp+="<TD><button onclick=\"GO('"+user+"')\">Watch->"+user+"</button></TD></div>";
+    document.body.insertAdjacentHTML("BeforeEnd", temp); 
+         
+}
+
+function ReadAndAdd(username,i)
+{
+ var user="https://static-cdn.jtvnw.net/previews-ttv/live_user_"+username+"-414x233.jpg";
+ fetch(user).then(res=>HandleUser(res.url,username,i));
+}
+
+function updateLocation()
+{
+    var sr = location.href.split('?')[0];
+    var slt=document.all.allusers;
+    var i=1;
+    sr+="?"+slt.options[0].value;
+    while(slt.options[i])
+    {
+       sr+="&"+slt.options[i].value;
+       i++;
+    }
+alert("Save The new Page as BookMark and delete the previous one if you don't need it");
+window.location.href=sr;
+}
+function GetSomeInfo()
+{
+   var sr = location.search.split('?')[1];
+   if(sr)
+   {
+       var users = sr.split('&');
+       if(users[0])
+       {
+          var i;
+          for(i=0;i<users.length;i++)
+          {
+             ReadAndAdd(users[i],i);
+          }
+      }
+   }
+   else
+   { 
+      let newopt= new Option("AM71113363","AM71113363");
+      document.all.allusers.appendChild(newopt);
+      updateLocation();
+   }
+   
+}
+
+function RemoveUser()
+{
+   var slt=document.all.allusers;
+ 
+   slt.remove(slt.selectedIndex);
+   if(slt.options.length==0)
+   {
+      let newopt= new Option("AM71113363","AM71113363");
+      document.all.allusers.appendChild(newopt);
+   }
+   updateLocation();
+}
+function ShowSettings()
+{
+  if(SHS==0)
+  {
+      document.all.MyLinks.style.visibility='hidden';
+      document.all.Settings.style.visibility='visible';
+      SHS=1;
+      document.all.bSettings.innerHTML="Hide Settings";
+  }
+  else
+  {
+      document.all.Settings.style.visibility='hidden';
+      document.all.MyLinks.style.visibility='visible';
+      SHS=0;
+      document.all.bSettings.innerHTML="Show Settings";
+  }
+}
+function AddNewUser()
+{
+   var ad = document.all.newuser.value;
+   if(ad.length > 1)
+   {
+     let newopt= new Option(ad,ad);
+      document.all.allusers.appendChild(newopt);
+      updateLocation();
+
+    }
+}
+
+</script>
+<body onload="GetSomeInfo()">
+<DIV id="Settings" name="Settings" style="visibility:hidden">
+<SELECT  id="allusers" name="allusers" style="width:220px">
+</SELECT><BUTTON onclick="RemoveUser()">Remove streamer</BUTTON>
+<DIV> 
+<INPUT id="newuser" name="newuser" TYPE="TEXT" SIZE="31"></INPUT> 
+<BUTTON onclick="AddNewUser()">Add Streamer</BUTTON>
+<div>NOTE: write only the username and not the full URL(example: AM71113363 and not https://twitch.tv/AM71113363)</div>
+<div>Click on the Image to Update it.</div>
+</DIV>
+</DIV>
+<div id="MyLinks" name="MyLinks">
+<A HREF="https://AM71113363.github.io"><IMG style="width:40px;height:40px;" src="https://AM71113363.github.io/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://github.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://github.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://twitter.com/AM71113363"><IMG style="width:40px;height:40px;" src="https://twitter.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://account.xbox.com/en-us/profile?gamertag=AM71113363"><IMG style="width:40px;height:40px;" src="https://xbox.com/favicon.ico"></IMG></A>
+&nbsp;&nbsp;
+<A HREF="https://www.twitch.tv/am71113363/?no-mobile-redirect=true"><IMG style="width:40px;height:40px;" src="https://twitch.tv/favicon.ico"></IMG></A>
+</div>
+<DIV><BUTTON id="bSettings" name="bSettings" onclick="ShowSettings()">Show Settings</BUTTON></DIV><br></br>
+<div id="offline" name="offline" >All your Favorite streamers are OFFLine,try again later,or check other streamers <a href="https://am71113363.github.io/TwitchFilter.html?AM=15AM=MinecraftAM=Just%20ChattingAM=VALORANTAM=FortniteAM=Call%20of%20Duty:%20Mobile">here</a></div>
+</body>
+</html> 
+ 
