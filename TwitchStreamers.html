@@ -42,10 +42,13 @@ function updateLocation()
     var slt=document.all.allusers;
     var i=1;
     sr+="?"+slt.options[0].value;
+    if(slt.options.length > 1)
+    {
     while(slt.options[i])
     {
        sr+="&"+slt.options[i].value;
        i++;
+    }
     }
 alert("Save The new Page as BookMark and delete the previous one if you don't need it");
 window.location.href=sr;
