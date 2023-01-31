@@ -116,12 +116,18 @@ function AddNewUser()
 
     }
 }
+function ViewUser()
+{
+  var TT="https://m.twitch.tv/"+document.all.allusers.value+"/home";
+  window.open(TT,"_blank");
+}
 
 </script>
 <body onload="GetSomeInfo()">
 <DIV id="Settings" name="Settings" style="visibility:hidden">
 <SELECT  id="allusers" name="allusers" style="width:220px">
-</SELECT><BUTTON onclick="RemoveUser()">Remove streamer</BUTTON>
+</SELECT><BUTTON onclick="RemoveUser()">Remove Streamer</BUTTON>
+<BUTTON onclick="ViewUser()">View Profile</BUTTON>
 <DIV> 
 <INPUT id="newuser" name="newuser" TYPE="TEXT" SIZE="31"></INPUT> 
 <BUTTON onclick="AddNewUser()">Add Streamer</BUTTON>
