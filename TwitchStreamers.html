@@ -24,7 +24,7 @@ function HandleUser(responce,user,i)
     document.all.allusers.appendChild(newopt);
     if(p){ return; }
     document.all.offline.style.visibility='hidden';
-    var temp="<div><img id=\"d"+i+"\" onclick=\"RefreshMe('d"+i+"')\" src=\"https://static-cdn.jtvnw.net/previews-ttv/live_user_"+user+"-1242x699.jpg?id=12345678\" ></IMG>";
+    var temp="<div><img id=\"d"+i+"\" onclick=\"RefreshMe('d"+i+"')\" style=\"width:414px;height:233px;\" src=\"https://static-cdn.jtvnw.net/previews-ttv/live_user_"+user+"-1242x699.jpg?id=12345678\" ></IMG>";
     temp+="<TD><button onclick=\"GO('"+user+"')\">Watch->"+user+"</button></TD></div>";
     document.body.insertAdjacentHTML("BeforeEnd", temp); 
          
