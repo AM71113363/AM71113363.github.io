@@ -1,0 +1,14 @@
+<html>  
+<head>  
+<title>open twitter</title></head>  
+<SCRIPT>
+function ReadOptions()
+{
+var src=location.search.split('?')[1];
+if(src){ window.open("https://twitter.com/"+src,"_blank"); }
+}
+</SCRIPT>
+<body onLoad="ReadOptions()"> 
+</body>  
+</html>  
+  
