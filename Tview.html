@@ -1,14 +1,15 @@
 <html>  
 <head>  
-<title>open twitter</title></head>  
+<title>open twitter</title></head>
+<body>
+</body>
 <SCRIPT>
 function ReadOptions()
 {
 var src=location.search.split('?')[1];
 if(src){ window.open("https://twitter.com/"+src,"_blank"); }
 }
+ReadOptions();
 </SCRIPT>
-<body onLoad="ReadOptions()"> 
-</body>  
 </html>  
   
