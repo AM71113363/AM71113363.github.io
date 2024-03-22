@@ -1,25 +1,23 @@
-<!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <link rel="icon" href="https://prod.cdni.callofduty.com/prelogin/web/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="" />
-  <meta name="author" content="avct" />
-  <link rel="stylesheet" href="style.css">
-  <title>Call of Duty: Warzone Mobile</title>
+  <link rel="icon" href="https://cdn.appsflyer.com/af-statics/images/favicon.ico" type="image/x-icon" />
 </head>
-<body class="splash">
-  <div id="offline">
-    <div id="offline__box">
-      <div id="offline__message">You appear to be offline. Please check your network connection and try again.</div>
-      <button id="offline__retry">Click Here to Retry</button>
-    </div>
-  </div>
-  <div class="splash__container">
-    <img src="media/img/splash_v2.webp" alt="splash" />
-  </div>
-  <script src="offline.js"></script>
+<body> 
+<script type="text/javascript">
+  var full_package_name = 'com.activision.callofduty.warzone';
+  var full_package_name_len = full_package_name.length;
+  var index_of_last_dash = full_package_name.lastIndexOf('-');
+  var package_name = index_of_last_dash < 0 ? full_package_name : full_package_name.slice(0,index_of_last_dash);
+  var app_link = 'codwzn://?af_deeplink=true&af_dp=codwzn%3A%2F%2F&campaign=System&is_retargeting=true&media_source=Fake_One&shortlink=87e228a8&source_caller=ui';
+  var store_link = 'market://details?id=com.activision.callofduty.warzone&referrer=Fake_Two';
+  var referrer = 'Fake_Three';
+  var store_link_encoded = encodeURI(store_link);
+  var parts = app_link.split('://');
+  var scheme = parts.shift();
+  var data = parts.join('://');
+  var appsflyer_click_ts = Date.now();
+  var intentUrl = 'intent://' + data + '#Intent;scheme=' + scheme + ';package=' + package_name + ';S.browser_fallback_url=' + store_link_encoded + ";S.market_referrer=" + referrer + ';l.appsflyer_click_ts=' + appsflyer_click_ts + ';end';
+  location.href = intentUrl; 
+</script>
 </body>
 </html>
