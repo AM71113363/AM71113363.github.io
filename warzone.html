@@ -19,8 +19,8 @@
   var data = parts.join('://');
   var appsflyer_click_ts = Date.now();
   var intentUrl = 'intent://' + data + '#Intent;scheme=' + scheme + ';package=' + package_name + ';S.browser_fallback_url=' + store_link_encoded + ";S.market_referrer=" + referrer + ';l.appsflyer_click_ts=' + appsflyer_click_ts + ';end';
- // location.href = intentUrl; 
-  document.all.aaaa.value=intentUrl;
+  location.href = app_link; 
+  //document.all.aaaa.value=intentUrl;
 </script>
 </body>
 </html>
