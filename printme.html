@@ -1,11 +1,36 @@
-<html> 
-<head> 
-<title>PrintMe</title> 
-<meta name=viewport content="width=device-width"> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>PrintMe</title>
+ <style>
+  body, html { margin: 0; padding: 0; height: 100%; } 
+  #main-container { display: flex; flex-direction: column; height: 100%; } 
+  #save-button { padding: 10px; font-size: 16px; cursor: pointer; } 
+  #text-area { flex: 1; resize: none; border: none; outline: none; padding: 10px; font-size: 14px;} 
+ </style> 
 </head> 
-<body bgcolor=white> 
-<textarea style="width:350px;height:500px"></textarea> 
-</body> 
- 
-</html> 
+ <body bgcolor=white>
+ <div id="main-container">
+ <button id="save-button">Download Text</button>
+  <textarea id="text-area" placeholder="Enter your text here..."></textarea> 
+ </div> 
+  <script>
+  document.getElementById('save-button').addEventListener('click', function() { 
+      const text = document.getElementById('text-area').value; 
+      const blob = new Blob([text], { type: 'text/plain' }); 
+      const anchor = document.createElement('a'); 
+      anchor.download = 'download.txt'; 
+      anchor.href = window.URL.createObjectURL(blob); 
+      anchor.target ='_blank'; 
+      anchor.style.display = 'none'; 
+      document.body.appendChild(anchor); 
+      anchor.click(); 
+      document.body.removeChild(anchor); 
+    }); 
+  </script>
+ </body>
+</html>
+
  
