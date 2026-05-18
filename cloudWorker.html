@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cloudflare Worker Test Client</title>
+<style>
+  body { font-family: sans-serif; margin: 20px; }
+  label { display: block; margin: 5px 0; }
+  select, input[type="text"], textarea { width: 200px; margin: 5px 0; }
+  button { margin: 10px 0; }
+  textarea { width: 100%; height: 150px; }
+</style>
+</head>
+<body>
+
+<h2>Cloudflare Worker Test Client</h2>
+
+<div>
+  <label>Expire in:</label>
+  <select id="days"></select> days
+  <select id="hours"></select> hours
+  <select id="minutes"></select> minutes
+</div>
+
+<button id="generate">Generate URL</button>
+
+<div>
+  <label>Generated URL:</label>
+  <input type="text" id="generatedUrl" />
+</div>
+
+<div>
+  <button id="query">Query</button>
+  <textarea id="result" readonly></textarea>
+</div>
+
+<script>
+(async () => {
+  // 1️⃣ Populate dropdowns
+  const days = document.getElementById("days");
+  const hours = document.getElementById("hours");
+  const minutes = document.getElementById("minutes");
+
+  for (let i = 0; i <= 30; i++) days.add(new Option(i, i));
+  for (let i = 0; i <= 24; i++) hours.add(new Option(i, i));
+  for (let i = 0; i <= 60; i++) minutes.add(new Option(i, i));
+
+  // 2️⃣ Grab secret key and host from URL fragment
+  // URL format: https://myPage.github.io/index.html#secretKey_myPath.dev
+  const fragment = window.location.hash.substring(1);
+  if (!fragment.includes("_")) {
+    alert("URL fragment must be in format: secretKey_host");
+    return;
+  }
+  const [SECRET_KEY, HOST] = fragment.split("_");
+
+  // 3️⃣ SHA1 helper function (browser-friendly)
+  async function sha1(msg) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(msg);
+    const hashBuffer = await crypto.subtle.digest("SHA-1", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // 4️⃣ Generate button
+  document.getElementById("generate").addEventListener("click", async () => {
+    const d = parseInt(days.value);
+    const h = parseInt(hours.value);
+    const m = parseInt(minutes.value);
+
+    const extraSeconds = d*24*3600 + h*3600 + m*60;
+    const currentEpoch = Math.floor(Date.now() / 1000);
+    const timeEpoch = currentEpoch + extraSeconds;
+
+    const token = await sha1(timeEpoch + SECRET_KEY);
+
+    const url = `https://${HOST}/?time=${timeEpoch}&token=${token}`;
+    document.getElementById("generatedUrl").value = url;
+  });
+
+  // 5️⃣ Query button
+  document.getElementById("query").addEventListener("click", async () => {
+    const url = document.getElementById("generatedUrl").value;
+    if (!url) return alert("Generate URL first");
+
+    try {
+      const response = await fetch(url);
+      const text = await response.text();
+      const textarea = document.getElementById("result");
+      textarea.value += text + "\n";
+    } catch (err) {
+      alert("Error fetching: " + err);
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
