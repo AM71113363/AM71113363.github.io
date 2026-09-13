@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore Chiave Deterministica</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f6f9; color: #333; max-width: 600px; margin: 0 auto; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        input { width: 100%; padding: 14px; margin: 10px 0 20px 0; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .btn { padding: 16px; font-size: 18px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background: #3b82f6; width: 100%; max-width: 300px; }
+        .console { background: #1e293b; color: #38bdf8; font-family: monospace; padding: 15px; border-radius: 8px; overflow-x: auto; text-align: left; font-size: 14px; min-height: 100px; white-space: pre-wrap; word-break: break-all; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Generatore Chiave Sblocco</h1>
+<p>Nessun account Google, nessun salvataggio nel browser. Funziona in isolamento totale.</p>
+
+<div class="card">
+    <label for="masterPassword"><b>Inserisci la tua Password Privata:</b></label>
+    <input type="password" id="masterPassword" placeholder="La tua password segreta...">
+    
+    <button class="btn" onclick="calcolaChiaveUnivoca()">GENERA CHIAVE</button>
+    <div id="consoleOutput" class="console">Inserisci la password e premi il pulsante per derivare la stringa di sblocco...</div>
+</div>
+
+<script>
+async function calcolaChiaveUnivoca() {
+    const passwordInput = document.getElementById('masterPassword').value;
+    const consoleDiv = document.getElementById('consoleOutput');
+    
+    if (!passwordInput) {
+        alert("Inserisci prima una password!");
+        return;
+    }
+
+    consoleDiv.innerText = "Elaborazione matematica della chiave in corso...";
+
+    try {
+        // 1. Convertiamo la password testuale in bytes
+        const encoder = new TextEncoder();
+        const passwordBytes = encoder.encode(passwordInput);
+
+        // 2. Importiamo i bytes come materiale grezzo per la chiave
+        const baseKey = await crypto.subtle.importKey(
+            "raw",
+            passwordBytes,
+            "PBKDF2",
+            false,
+            ["deriveBits", "deriveKey"]
+        );
+
+        // 3. Sale statico fisso per garantire che la stessa password generi SEMPRE lo stesso ID
+        // Puoi personalizzare questa stringa di 16 byte come preferisci
+        const saleStatico = encoder.encode("MioSaleSegreto123");
+
+        // 4. Derivazione matematica della chiave tramite PBKDF2 (100.000 iterazioni per sicurezza)
+        const chiaveDerivataBuffer = await crypto.subtle.deriveBits(
+            {
+                name: "PBKDF2",
+                salt: saleStatico,
+                iterations: 100000,
+                hash: "SHA-256"
+            },
+            baseKey,
+            256 // Genera esattamente una stringa forte a 256-bit (32 bytes)
+        );
+
+        // 5. Convertiamo il risultato finale in Base64 per l'output grafico o l'invio alla serratura
+        const stringaUnivoca = btoa(String.fromCharCode(...new Uint8Array(chiaveDerivataBuffer)));
+        
+        consoleDiv.innerHTML = "✅ CHIAVE GENERATA CON SUCCESSO!<br><br><b>Stringa unica deterministica:</b><br>" + stringaUnivoca;
+
+    } catch (err) {
+        consoleDiv.innerText = `Errore di calcolo: ${err.message}`;
+    }
+}
+</script>
+
+</body>
+</html>
