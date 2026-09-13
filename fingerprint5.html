@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAuthn Hardware Zero-Data</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f6f9; color: #333; max-width: 600px; margin: 0 auto; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .btn { padding: 16px; font-size: 16px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-reg { background: #10b981; }
+        .btn-auth { background: #3b82f6; }
+        .console { background: #1e293b; color: #38bdf8; font-family: monospace; padding: 15px; border-radius: 8px; overflow-x: auto; text-align: left; font-size: 14px; min-height: 100px; white-space: pre-wrap; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+<h1>Biometria Hardware Persistente</h1>
+<p>La chiave risiede nel chip del telefono. Sopravvive alla cancellazione dei dati del browser.</p>
+
+<div class="card">
+    <div class="grid">
+        <button class="btn btn-reg" onclick="registraNelChip()">FASE 1: Registra nel Chip</button>
+        <button class="btn btn-auth" onclick="recuperaDalChip()">FASE 2: Recupera dal Chip</button>
+    </div>
+    <div id="consoleOutput" class="console">Istruzioni:<br>1. Clicca su 'Registra' (crea la chiave nel chip).<br>2. Clicca su 'Recupera' (legge la chiave dal chip usando l'impronta).</div>
+</div>
+
+<script>
+const bufferToBase64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+
+// FASE 1: Genera la passkey permanente nel chip hardware del telefono
+async function registraNelChip() {
+    const consoleDiv = document.getElementById('consoleOutput');
+    consoleDiv.innerText = "Interrogazione chip per registrazione...";
+
+    try {
+        const credential = await navigator.credentials.create({
+            publicKey: {
+                challenge: crypto.getRandomValues(new Uint8Array(32)),
+                rp: { name: "Offline Hardware Key", id: window.location.hostname },
+                // Usiamo un ID utente fisso locale per rendere la credenziale stabile nel chip
+                user: { 
+                    id: Uint8Array.from([1, 2, 3, 4, 5]), 
+                    name: "local.user", 
+                    displayName: "Local User" 
+                },
+                pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+                authenticatorSelection: { 
+                    authenticatorAttachment: "platform", 
+                    userVerification: "required",
+                    residentKey: "required", // INDISPENSABILE: dice ad Android di salvare la chiave nel chip
+                    requireResidentKey: true
+                },
+                attestation: "none"
+            }
+        });
+
+        const saleOriginario = bufferToBase64(credential.rawId);
+        consoleDiv.innerHTML = `✅ CHIAVE CHIP CREATA!<br><br><b>ID Estratto (Il tuo Sale):</b><br>${saleOriginario}<br><br><small>Ora puoi anche cancellare la cache del browser. La chiave è memorizzata nell'hardware del telefono.</small>`;
+
+    } catch (err) {
+        consoleDiv.innerText = `Errore Registrazione: ${err.name}\n${err.message}`;
+    }
+}
+
+// FASE 2: Interroga il chip per farsi ridare lo stesso identico ID (Sale) tramite impronta
+async function recuperaDalChip() {
+    const consoleDiv = document.getElementById('consoleOutput');
+    consoleDiv.innerText = "Ricerca della chiave nel chip hardware...";
+
+    try {
+        const assertion = await navigator.credentials.get({
+            publicKey: {
+                challenge: crypto.getRandomValues(new Uint8Array(32)),
+                // Lasciando allowCredentials vuoto, costringiamo il telefono a cercare nel suo chip 
+                // una passkey creata precedentemente per questo specifico dominio GitHub Pages
+                allowCredentials: [], 
+                userVerification: "required"
+            }
+        });
+
+        // Il chip riconosce l'impronta e restituisce lo STESSO IDENTICO ID della Fase 1
+        const saleRecuperato = bufferToBase64(assertion.rawId);
+        consoleDiv.innerHTML = `✅ IMPRONTA RICONOSCIUTA!<br><br><b>Sale Rigenerato dal Chip:</b><br>${saleRecuperato}`;
+
+    } catch (err) {
+        consoleDiv.innerText = `Errore Recupero: ${err.name}\n${err.message}\n\n(Se hai cancellato i dati, assicurati di aver fatto prima la Fase 1 su questo dispositivo)`;
+    }
+}
+</script>
+
+</body>
+</html>
