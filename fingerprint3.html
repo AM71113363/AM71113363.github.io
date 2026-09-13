@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Lettore Impronte</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f6f9; color: #333; max-width: 600px; margin: 0 auto; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        .btn { padding: 16px; font-size: 18px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background: #10b981; width: 100%; max-width: 300px; }
+        .console { background: #1e293b; color: #38bdf8; font-family: monospace; padding: 15px; border-radius: 8px; overflow-x: auto; text-align: left; font-size: 14px; min-height: 100px; white-space: pre-wrap; word-break: break-all; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Test Lettura Biometrica</h1>
+<p>Verifica immediata del funzionamento del chip hardware su GitHub Pages.</p>
+
+<div class="card">
+    <button class="btn" onclick="forzaLetturaImpronta()">INTERROGA LETTORE</button>
+    <div id="consoleOutput" class="console">Premi il pulsante sopra per inviare il comando al chip...</div>
+</div>
+
+<script>
+async function forzaLetturaImpronta() {
+    const consoleDiv = document.getElementById('consoleOutput');
+    consoleDiv.innerText = "Fase 1: Invio comando al chip biometrico...";
+
+    try {
+        if (!navigator.credentials || !navigator.credentials.create) {
+            throw new Error("L'API delle credenziali (WebAuthn) non è supportata o è bloccata dal browser.");
+        }
+
+        const credential = await navigator.credentials.create({
+            publicKey: {
+                challenge: crypto.getRandomValues(new Uint8Array(32)),
+                rp: { name: "Test Hardware", id: window.location.hostname },
+                user: { id: new Uint8Array([1]), name: "t", displayName: "t" },
+                pubKeyCredParams: [{ type: "public-key", alg: -7 }],
+                authenticatorSelection: { 
+                    authenticatorAttachment: "platform", 
+                    userVerification: "required",
+                    residentKey: "required",
+                    requireResidentKey: true
+                },
+                attestation: "none"
+            }
+        });
+
+        if (!credential) {
+            throw new Error("Il chip ha risposto, ma ha restituito un oggetto vuoto.");
+        }
+
+        // Conversione dell'ID grezzo in stringa leggibile
+        const stringaUnivoca = btoa(String.fromCharCode(...new Uint8Array(credential.rawId)));
+        consoleDiv.innerText = "✅ LETTORE FUNZIONANTE!\n\nStringa univoca estratta dal chip:\n" + stringaUnivoca;
+
+    } catch (err) {
+        // Intercetta l'errore esatto restituito da Android o da Chrome
+        consoleDiv.innerText = `❌ BLOCCO RILEVATO:\n\nNome Errore: ${err.name}\nMessaggio: ${err.message}`;
+    }
+}
+</script>
+
+</body>
+</html>
