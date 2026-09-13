@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaccia 2FA con Autofill</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f6f9; color: #333; max-width: 400px; margin: 0 auto; text-align: center; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-top: 50px; text-align: left; }
+        input { width: 100%; padding: 14px; margin: 10px 0 20px 0; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        input:focus { border-color: #3b82f6; outline: none; }
+        .btn { padding: 14px; font-size: 16px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; background: #3b82f6; width: 100%; }
+        .console { background: #1e293b; color: #38bdf8; font-family: monospace; padding: 15px; border-radius: 8px; font-size: 13px; min-height: 60px; white-space: pre-wrap; word-break: break-all; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Verifica 2FA</h2>
+    <p style="font-size: 14px; color: #64748b;">Tocca il campo sottostante per inserire il codice di sicurezza tramite l'autofill del tuo provider 2FA.</p>
+    
+    <form id="2faForm" onsubmit="inviaCodice(); return false;">
+        <label for="twoFactorCode"><b>Codice di Sicurezza:</b></label>
+        
+        <!-- autocomplete="one-time-code" forza la comparsa dell'autofill 2FA di sistema -->
+        <input 
+            type="text" 
+            id="twoFactorCode" 
+            name="twoFactorCode" 
+            autocomplete="one-time-code" 
+            inputmode="numeric" 
+            pattern="[0-9]*" 
+            maxlength="6" 
+            placeholder="000000" 
+            required>
+            
+        <button type="submit" class="btn">Verifica</button>
+    </form>
+
+    <div id="consoleOutput" class="console">In attesa che l'utente selezioni il codice...</div>
+</div>
+
+<script>
+function inviaCodice() {
+    const codice = document.getElementById('twoFactorCode').value;
+    const consoleDiv = document.getElementById('consoleOutput');
+    
+    // Output del codice catturato dall'autofill
+    consoleDiv.innerHTML = `✅ Codice ricevuto: <b>${codice}</b>`;
+}
+</script>
+
+</body>
+</html>
