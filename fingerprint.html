@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratorio WebAuthn & 2FA Indipendente</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: #f4f6f9; color: #333; max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        h1, h2 { color: #2c3e50; margin-top: 0; }
+        input { width: 100%; padding: 12px; margin: 10px 0 20px 0; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        input:focus { border-color: #3b82f6; outline: none; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { padding: 14px; font-size: 16px; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; width: 100%; }
+        .btn:hover { opacity: 0.9; }
+        .btn-reg { background: #10b981; }
+        .btn-auth { background: #3b82f6; }
+        .console { background: #1e293b; color: #38bdf8; font-family: 'Courier New', Courier, monospace; padding: 15px; border-radius: 8px; overflow-x: auto; text-align: left; font-size: 13px; max-height: 300px; white-space: pre-wrap; word-break: break-all; }
+        .label-title { font-weight: bold; color: #f8fafc; display: block; margin-top: 8px; border-bottom: 1px solid #334155; padding-bottom: 2px; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; font-weight: bold; margin-top: 10px; font-size: 14px; }
+        .badge-ready { background: #e2e8f0; color: #64748b; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-error { background: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+<body>
+
+<h1>Test Biometrico & 2FA Isolato</h1>
+<p>Questa pagina gira interamente nel tuo browser su GitHub Pages (HTTPS) senza bisogno di server esterni o ESP32.</p>
+
+<div class="card">
+    <h2>1. Impostazioni Chiave</h2>
+    <label for="customPassword"><b>Password Personalizzata (Opzionale):</b></label>
+    <input type="password" id="customPassword" placeholder="Inserisci una password per irrobustire l'identità...">
+    
+    <div class="grid">
+        <button class="btn btn-reg" onclick="registraImpronta()">Fase 1: Registra Impronta</button>
+        <button class="btn btn-auth" onclick="verificaImpronta()">Fase 2: Simula Sblocco</button>
+    </div>
+    
+    <div>
+        Stato: <span id="statusBadge" class="status-badge badge-ready">Pronto</span>
+    </div>
+</div>
+
+<div class="card">
+    <h2>2. Dati Crittografici Estratti (Log)</h2>
+    <div id="consoleOutput" class="console">I dati estratti dal chip hardware del telefono compariranno qui dopo la scansione...</div>
+</div>
+
+<script>
+// Variabili locali per simulare la memoria del database (normalmente risiederebbero sull'ESP32)
+let databaseImpronta = {
+    credentialId: "",
+    passwordAbbinata: ""
+};
+
+// Helper per convertire i Buffer binari nativi in stringhe di testo sicure (Base64URL)
+const bufferToBase64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)))
+    .replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
+
+// Aggiorna visivamente lo stato dell'interfaccia
+void function updateStatus(text, type) {
+    const badge = document.getElementById('statusBadge');
+    badge.innerText = text;
+    badge.className = "status-badge " + (type === 'success' ? 'badge-success' : type === 'error' ? 'badge-error' : 'badge-ready');
+}
+
+// === FASE 1: REGISTRAZIONE (GENERAZIONE CREDENZIALE) ===
+async function registraImpronta() {
+    const passwordInserita = document.getElementById('customPassword').value.trim();
+    const consoleDiv = document.getElementById('consoleOutput');
+    updateStatus("Scansione in corso...", "ready");
+
+    // 1. Sfida crittografica casuale (Challenge)
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+
+    // 2. Opzioni di creazione della chiave hardware
+    const publicKeyOptions = {
+        challenge: challenge,
+        rp: { name: "Laboratorio Locale Sandbox", id: window.location.hostname },
+        user: { 
+            id: crypto.getRandomValues(new Uint8Array(16)), 
+            name: "utente_test", 
+            displayName: "Utente Sandbox" 
+        },
+        pubKeyCredParams: [{ type: "public-key", alg: -7 }], // Algoritmo ES256 (standard Apple/Google)
+        authenticatorSelection: { 
+            authenticatorAttachment: "platform", // Forza l'uso del sensore biometrico del dispositivo attuale
+            userVerification: "required"         // Richiede esplicitamente l'impronta o sblocco facciale
+        },
+        attestation: "direct",
+        timeout: 60000
+    };
+
+    try {
+        // Avvia il prompt biometrico nativo del sistema operativo
+        const credential = await navigator.credentials.create({ publicKey: publicKeyOptions });
+        
+        // Estrazione di tutti i dettagli dall'hardware del telefono
+        const credId = bufferToBase64(credential.rawId);
+        const clientDataJSON = bufferToBase64(credential.response.clientDataJSON);
+        const attestationObject = bufferToBase64(credential.response.attestationObject);
+        
+        // Salviamo nella memoria locale temporanea della pagina (Simulazione salvataggio ESP32)
+        databaseImpronta.credentialId = credId;
+        databaseImpronta.passwordAbbinata = passwordInserita;
+
+        // Mostriamo a schermo l'intero albero dei dettagli estratti
+        consoleDiv.innerHTML = 
+            `<span class='label-title'>[REGISTRAZIONE AVVENUTA CON SUCCESSO]</span>` +
+            `<span class='label-title'>Credential ID (Stringa fissa immutabile):</span>${credId}\n` +
+            `<span class='label-title'>Lunghezza Stringa ID:</span>${credId.length} caratteri\n` +
+            `<span class='label-title'>Tipo Credenziale:</span>${credential.type}\n` +
+            `<span class='label-title'>Client Data JSON (Dettagli sessione browser):</span>${clientDataJSON}\n` +
+            `<span class='label-title'>Attestation Object (Metadati crittografici del chip):</span>${attestationObject}\n` +
+            `<span class='label-title'>Password di backup legata:</span>${passwordInserita ? passwordInserita : "Nessuna (Solo Biometrico)"}`;
+
+        // Avviso globale all'utente
+        alert("REGISTRATO!\nIl browser ha estratto con successo i dettagli crittografici immutabili dal chip di sicurezza.");
+        updateStatus("Registrato con Successo", "success");
+
+    } catch (err) {
+        consoleDiv.innerText = `Errore di Registrazione:\n${err.name} - ${err.message}`;
+        updateStatus("Errore Scansione", "error");
+    }
+}
+
+// === FASE 2: VERIFICA / LOGIN (SIMULAZIONE SBLOCCO) ===
+async function verificaImpronta() {
+    const passwordVerifica = document.getElementById('customPassword').value.trim();
+    const consoleDiv = document.getElementById('consoleOutput');
+
+    // Controllo preliminare sulla memoria locale
+    if (!databaseImpronta.credentialId) {
+        alert("Errore: Devi prima effettuare la 'Fase 1: Registra Impronta' per salvare i dettagli nella memoria della pagina.");
+        return;
+    }
+
+    updateStatus("Verifica in corso...", "ready");
+
+    const challenge = new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+
+    // Convertiamo l'ID salvato precedentemente da stringa a buffer binario per passarlo al telefono
+    const base64ToBuffer = base64 => Uint8Array.from(atob(base64.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0));
+
+    const publicKeyRequestOptions = {
+        challenge: challenge,
+        allowCredentials: [{
+            id: base64ToBuffer(databaseImpronta.credentialId),
+            type: 'public-key'
+        }],
+        userVerification: "required",
+        timeout: 60000
+    };
+
+    try {
+        // Richiede nuovamente l'impronta. Il telefono firmerà la richiesta solo se il dito appartiene al proprietario
+        const assertion = await navigator.credentials.get({ publicKey: publicKeyRequestOptions });
+        
+        // Estraiamo i dettagli della risposta di sblocco
+        const authData = bufferToBase64(assertion.response.authenticatorData);
+        const signature = bufferToBase64(assertion.response.signature);
+
+        // --- CONFRONTO DEI DATI COMBINATI (LOGICA DI AUTENTICAZIONE) ---
+        // 1. Verifica che la password inserita adesso coincida con quella registrata
+        const passwordCorretta = (passwordVerifica === databaseImpronta.passwordAbbinata);
+        
+        // 2. Verifica che l'ID dell'impronta corrisponda a quello registrato
+        const improntaCorretta = (bufferToBase64(assertion.rawId) === databaseImpronta.credentialId);
+
+        consoleDiv.innerHTML = 
+            `<span class='label-title'>[RISPOSTA DI SBLOCCO RICEVUTA]</span>` +
+            `<span class='label-title'>Credential ID confermato dal telefono:</span>${bufferToBase64(assertion.rawId)}\n` +
+            `<span class='label-title'>Authenticator Data (Stato del chip hardware):</span>${authData}\n` +
+            `<span class='label-title'>Firma Crittografica della sessione (Signature):</span>${signature}\n` +
+            `<span class='label-title'>Esito Controllo Password:</span>${passwordCorretta ? "VALIDA ✅" : "ERRATA ❌"}\n` +
+            `<span class='label-title'>Esito Controllo Impronta:</span>${improntaCorretta ? "VALIDA ✅" : "ERRATA ❌"}`;
+
+        if (passwordCorretta && improntaCorretta) {
+            alert("AUTENTICAZIONE RIUSCITA! 🎉\nLa combinazione Impronta + Password è corretta.");
+            updateStatus("Accesso Garantito", "success");
+        } else {
+            alert("ACCESSO NEGATO!\nI dettagli biometrici o la password non coincidono.");
+            updateStatus("Credenziali Errate", "error");
+        }
+
+    } catch (err) {
